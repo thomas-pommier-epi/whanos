@@ -1,0 +1,3 @@
+FROM whanos-python AS base
+
+CMD ["python3", "-m", "app"]

@@ -1,0 +1,27 @@
+FROM alpine:3.20
+
+LABEL base-image-name="whanos-befunge"
+
+ONBUILD RUN apk add --no-cache bash
+
+ONBUILD SHELL ["/bin/bash", "-c"]
+ONBUILD ENV SHELL=/bin/bash
+
+##
+
+WORKDIR /app
+
+ONBUILD COPY ./app /app/app
+
+ONBUILD RUN PROGRAM_PATH=$(find ./app -maxdepth 1 -type f -name "main.bf") \
+    && if [ $(echo "$PROGRAM_PATH" | wc -l) -ne 1 ]; then echo "There should be exactly one main.bf file in the /app directory!" && exit 1; fi \
+    && ln -s $PROGRAM_PATH main.bf
+
+ONBUILD RUN apk add --no-cache build-base git \
+    && git clone https://github.com/catseye/Befunge-93 bf \
+    && cd bf \
+    && make -j4 \
+    && mv bin/bef /app \
+    && cd .. \
+    && rm -rf bf \
+    && apk del build-base git

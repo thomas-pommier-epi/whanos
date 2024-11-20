@@ -1,0 +1,3 @@
+FROM whanos-java AS base
+
+CMD ["java", "-jar", "app.jar"]

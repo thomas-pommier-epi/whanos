@@ -1,0 +1,30 @@
+FROM alpine:3.20
+
+LABEL base-image-name="whanos-java"
+
+ONBUILD RUN apk add --no-cache bash
+
+ONBUILD SHELL ["/bin/bash", "-c"]
+ONBUILD ENV SHELL=/bin/bash
+
+##
+
+WORKDIR /app
+
+ONBUILD RUN apk add --no-cache openjdk21
+
+ONBUILD COPY pom.xml /app
+
+ONBUILD RUN if [ ! -f pom.xml ]; then echo "pom.xml not found!" && exit 1; fi
+
+ONBUILD COPY /app /app/app
+
+ONBUILD RUN apk add --no-cache maven \
+    && mvn clean package \
+    && mv target/app.jar /app \
+    && mvn clean \
+    && apk del maven \
+    && rm -rf /root/.m2 \
+    && rm -rf /tmp/* /var/tmp/*
+
+ONBUILD RUN if [ ! -f app.jar ]; then echo "Compiled JAR file not found!" && exit 1; fi

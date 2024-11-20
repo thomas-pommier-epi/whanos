@@ -1,0 +1,3 @@
+FROM whanos-befunge AS base
+
+ENTRYPOINT ["./bef", "-q", "main.bf"]

@@ -1,0 +1,3 @@
+FROM whanos-c AS base
+
+ENTRYPOINT ["./compiled-app"]

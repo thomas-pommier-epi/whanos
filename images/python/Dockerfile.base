@@ -1,0 +1,26 @@
+FROM alpine:3.20
+
+LABEL base-image-name="whanos-python"
+
+ONBUILD RUN apk add --no-cache bash
+
+ONBUILD SHELL ["/bin/bash", "-c"]
+ONBUILD ENV SHELL=/bin/bash
+
+##
+
+ONBUILD RUN apk add --no-cache python3
+
+WORKDIR /app
+
+ONBUILD COPY requirements.txt /app
+
+ONBUILD RUN if [ ! -f requirements.txt ]; then echo "requirements.txt not found!" && exit 1; fi
+
+ONBUILD RUN apk add --no-cache py3-pip \
+    && pip install -r requirements.txt --break-system-packages \
+    && pip cache purge \
+    && apk del py3-pip \
+    && rm -rf /root/.cache
+
+ONBUILD COPY /app /app

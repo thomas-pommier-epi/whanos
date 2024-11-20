@@ -1,0 +1,28 @@
+FROM alpine:3.20
+
+LABEL base-image-name="whanos-c"
+
+ONBUILD RUN apk add --no-cache bash
+
+ONBUILD SHELL ["/bin/bash", "-c"]
+ONBUILD ENV SHELL=/bin/bash
+
+##
+
+WORKDIR /app
+
+ONBUILD RUN apk add --no-cache musl-dev
+
+ONBUILD COPY Makefile /app
+
+ONBUILD RUN if [ ! -f Makefile ]; then echo "Makefile not found!" && exit 1; fi
+
+ONBUILD COPY /app /app/app
+
+ONBUILD RUN apk add --no-cache gcc make bash \
+    && make -j4 \
+    && make clean \
+    && apk del gcc make \
+    && rm -rf /tmp/* /var/tmp/*
+
+ONBUILD RUN if [ ! -f ./compiled-app ]; then echo "compiled-app not found, it should be place in the root of the repository!" && exit 1; fi
