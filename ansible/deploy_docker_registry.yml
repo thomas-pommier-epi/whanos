@@ -1,0 +1,67 @@
+---
+- name: Deploy Docker Registry
+  hosts: docker_registry
+  become: yes # sudo
+  tasks:
+    # https://www.digitalocean.com/community/tutorials/how-to-set-up-a-private-docker-registry-on-ubuntu-20-04
+    - name: Ensure Docker is installed
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+
+    ## Auth ##
+
+    - name: Ensure htpasswd is preset
+      apt:
+        name: apache2-utils
+        state: present
+        update_cache: yes
+
+    - name: Create directory for Docker Registry auth
+      file:
+        path: /etc/docker/registry
+        state: directory
+        mode: '0755'
+
+    - name: Create Docker Registry user
+      command: htpasswd -B -c /etc/docker/registry/registry.password admin
+      args:
+      creates: /etc/docker/registry/registry.password
+      register: htpasswd_output
+
+      ## TEMP ##
+    - name: Output Docker Registry user password
+      debug:
+      msg: "{{ htpasswd_output.stdout }}"
+
+    ##########
+
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Create directory for Docker Registry data
+      file:
+        path: /var/lib/registry
+        state: directory
+        mode: '0755'
+
+    - name: Deploy Docker Registry container
+      docker_container:
+        name: registry
+        image: registry:2
+        state: started
+        restart_policy: always
+        ports:
+          - "5000:5000"
+        environment:
+          REGISTRY_AUTH: htpasswd
+          REGISTRY_AUTH_HTPASSWD_REALM: Registry
+          REGISTRY_AUTH_HTPASSWD_PATH: /etc/docker/registry/registry.password
+          REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
+        volumes:
+          - /var/lib/registry:/var/lib/registry
+          - /etc/docker/registry:/etc/docker/registry

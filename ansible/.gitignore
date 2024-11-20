@@ -1,0 +1,5 @@
+keys/*
+!/keys/.gitkeep
+
+vault.yml
+hosts.ini

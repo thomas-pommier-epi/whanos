@@ -1,0 +1,53 @@
+---
+- name: Deploy Jenkins
+  hosts: jenkins-master
+  become: true
+  tasks:
+    - name: add jenkins key
+      apt_key:
+        url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+        state: present
+
+    - name: add jenkins repo
+      apt_repository: #ansible module to add repo
+        repo: "deb https://pkg.jenkins.io/debian-stable binary/"
+        state: present
+
+    - name: install java #install java as jenkins need jdk
+      apt:
+        name: openjdk-11-jre
+        state: present
+
+    - name: install jenkins #install jenkins
+      apt:
+        name: jenkins
+        state: present
+
+    ## Install Configuration files ##
+
+    ## todo: find the files, huge copy and paste via SFTP. ##
+
+
+    #################################
+
+    - name: enable jenkins to start at boot time
+      service:
+        name: jenkins
+        enabled: yes
+
+    - name: start jenkins service
+      service:
+        name: jenkins
+        state: started
+
+
+    ## Jenkins has started ##
+
+    - name: Wait for Jenkins to start
+      uri:
+        url: http://localhost:8080/cli/
+        status_code: 200
+      register: result
+      until: result.status == 200
+      retries: 5
+      delay: 10
