@@ -12,3 +12,13 @@ To install Jenkins on your local machine, you can follow the instructions below:
 3. Configuration as Code
 4. Job DSL
 5. Credentials Binding
+
+
+## Base repo
+
+| ------ |
+| whanos-c | https://github.com/thomas-pommier-epi/whanos-c |
+| whanos-javascript | ***REMOVED*** |
+| whanos-java | http://***REMOVED***/whanos_user/whanos-java.git |
+| whanos-python | https://gitlab.com/thomas-pommier-epi/whanos-python.git |
+| whanos-befunge | git@***REMOVED***:whanos_user/whanos-befunge.git | 

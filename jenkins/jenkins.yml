@@ -127,4 +127,5 @@ tool:
     globalSettingsProvider: "standard"
     settingsProvider: "standard"
 jobs:
-  - file: /home/antoine/.jenkins/job_dsl.groovy
+  - file: /home/antoine/.jenkins/jobs_base_images.groovy
+  - file: /home/antoine/.jenkins/job_link_project.groovy
