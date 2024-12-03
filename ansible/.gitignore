@@ -3,3 +3,7 @@ keys/*
 
 vault.yml
 hosts.ini
+.terraform*
+terraform.tfstate*
+
+registry/registry_pwd.txt

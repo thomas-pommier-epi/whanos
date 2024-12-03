@@ -1,0 +1,7 @@
+*.json
+.env
+
+id_rsa
+*.pub
+.terraform/
+terraform*

@@ -1,6 +1,7 @@
 ---
+
 - name: Deploy Docker Registry
-  hosts: docker_registry
+  hosts: all
   become: yes # sudo
   tasks:
     # https://www.digitalocean.com/community/tutorials/how-to-set-up-a-private-docker-registry-on-ubuntu-20-04
@@ -12,7 +13,7 @@
 
     ## Auth ##
 
-    - name: Ensure htpasswd is preset
+    - name: Ensure htpasswd is present
       apt:
         name: apache2-utils
         state: present
@@ -24,16 +25,17 @@
         state: directory
         mode: '0755'
 
-    - name: Create Docker Registry user
-      command: htpasswd -B -c /etc/docker/registry/registry.password admin
-      args:
-      creates: /etc/docker/registry/registry.password
-      register: htpasswd_output
+    - name: Read password file
+      command: echo "{{ lookup('file', 'registry/registry_pwd.txt') }}"
+      register: password_file_content
 
-      ## TEMP ##
-    - name: Output Docker Registry user password
-      debug:
-      msg: "{{ htpasswd_output.stdout }}"
+    - name: Create htpasswd file using bash
+      shell: |
+        for line in {{ password_file_content.stdout }}; do
+          username=$(echo $line | cut -d':' -f1)
+          password=$(echo $line | cut -d':' -f2)
+          htpasswd -cbB /etc/docker/registry/registry.password $username $password
+        done
 
     ##########
 
@@ -49,6 +51,12 @@
         state: directory
         mode: '0755'
 
+    - name: Copy config.yml to target machine
+      copy:
+        src: registry/config.yml
+        dest: /etc/docker/registry/config.yml
+        mode: '0644'
+
     - name: Deploy Docker Registry container
       docker_container:
         name: registry
@@ -57,7 +65,7 @@
         restart_policy: always
         ports:
           - "5000:5000"
-        environment:
+        env:
           REGISTRY_AUTH: htpasswd
           REGISTRY_AUTH_HTPASSWD_REALM: Registry
           REGISTRY_AUTH_HTPASSWD_PATH: /etc/docker/registry/registry.password

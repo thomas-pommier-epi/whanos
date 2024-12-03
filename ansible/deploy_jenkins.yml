@@ -1,6 +1,6 @@
 ---
 - name: Deploy Jenkins
-  hosts: jenkins-master
+  hosts: all
   become: true
   tasks:
     - name: add jenkins key
@@ -25,7 +25,21 @@
 
     ## Install Configuration files ##
 
-    ## todo: find the files, huge copy and paste via SFTP. ##
+    - name: Copy Docker images to /opt/images
+      copy:
+      src: ../images/
+      dest: /opt/images/
+      mode: '0755'
+
+    - name: "Deploy jcasc"
+      hosts: jenkins
+      vars:
+        jenkins_casc_config_path_configure: true
+        jenkins_casc_config_path: "/var/lib/jenkins/jcasc-folder"
+        jenkins_casc_config_fileglobs:
+            - file/jcasc/my-jenkins/*.yml
+            - file/jcasc/my-jenkins/*.yaml
+
 
 
     #################################
