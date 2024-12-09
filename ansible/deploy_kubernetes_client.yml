@@ -1,0 +1,65 @@
+---
+- name: Install Kubernetes and kubectl
+  hosts: all
+  become: true
+  vars:
+    gcp_project_id: "{{ lookup('env', 'TF_VAR_gcp_project_id') }}"
+    gcp_region: "{{ lookup('env', 'TF_VAR_gcp_region') }}"
+
+  tasks:
+    - name: Install Google Cloud SDK Dependencies
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+        state: present
+
+    - name: Download Google Cloud public signing key
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+        keyring: /usr/share/keyrings/cloud.google.gpg
+
+    - name: Add Google Cloud SDK repository
+      apt_repository:
+        repo: deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main
+        state: present
+        filename: google-cloud-sdk
+
+    - name: Update apt package index
+      apt:
+        update_cache: true
+
+    - name: Install Google Cloud SDK / Kubectl
+      apt:
+        name:
+          - google-cloud-sdk
+          - google-cloud-cli-gke-gcloud-auth-plugin
+          - kubectl
+        state: present
+
+    - name: Create directory for auth file
+      file:
+        path: /opt/auth
+        state: directory
+        mode: '0755'
+
+    - name: Copy Auth File
+      copy:
+        src: keys/whanos_gke.json
+        dest: /opt/auth/whanos_gke.json
+        mode: '0600'
+
+    - name: Authenticate to Google Cloud
+      command: gcloud auth activate-service-account --key-file /opt/auth/whanos_gke.json
+
+    - name: Set Google Cloud project
+      command: gcloud config set project {{ gcp_project_id }}
+
+    - name: Set compute zone
+      command: gcloud config set compute/zone {{ gcp_region }}
+
+    - name: Get credentials for GKE cluster
+      command: gcloud container clusters get-credentials "whanos-gke-cluster"

@@ -32,8 +32,8 @@ freeStyleJob('/link-project') {
                     scm("* * * * *")
                 }
                 steps {
-                    shell("docker build -t $PROJECT_NAME .")
-                    shell("if [[ -f whanos.yml ]] then; kubectl apply -f whanos.yml; fi")
+                    shell(". /opt/jenkins_scripts/scripts/build_image.sh $PROJECT_NAME")
+                    shell(". /opt/jenkins_scripts/scripts/deploy_image.sh")
                 }
             }''')
         }

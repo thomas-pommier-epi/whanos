@@ -1,0 +1,8 @@
+---
+plugins:
+  - artifactId: configuration-as-code
+  - artifactId: configuration-as-code-groovy
+  - artifactId: ssh-credentials
+  - artifactId: git
+  - artifactId: git-client
+  - artifactId: job-dsl

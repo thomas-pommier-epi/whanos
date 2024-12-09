@@ -2,14 +2,14 @@
 
 - name: Deploy Docker Registry
   hosts: all
-  become: yes # sudo
+  become: true # sudo
   tasks:
     # https://www.digitalocean.com/community/tutorials/how-to-set-up-a-private-docker-registry-on-ubuntu-20-04
     - name: Ensure Docker is installed
       apt:
         name: docker.io
         state: present
-        update_cache: yes
+        update_cache: true
 
     ## Auth ##
 
@@ -17,7 +17,7 @@
       apt:
         name: apache2-utils
         state: present
-        update_cache: yes
+        update_cache: true
 
     - name: Create directory for Docker Registry auth
       file:
@@ -31,6 +31,7 @@
 
     - name: Create htpasswd file using bash
       shell: |
+        set -o pipefail
         for line in {{ password_file_content.stdout }}; do
           username=$(echo $line | cut -d':' -f1)
           password=$(echo $line | cut -d':' -f2)
@@ -43,7 +44,7 @@
       service:
         name: docker
         state: started
-        enabled: yes
+        enabled: true
 
     - name: Create directory for Docker Registry data
       file:
@@ -58,7 +59,7 @@
         mode: '0644'
 
     - name: Deploy Docker Registry container
-      docker_container:
+      community.docker.docker_container:
         name: registry
         image: registry:2
         state: started

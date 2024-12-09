@@ -7,8 +7,8 @@ pip3 install -r requirements.txt
 
 echo Creating hosts file.
 
-ansible-galaxy role install wcm_io_devops.jenkins_configuration_as_code
 ansible-galaxy collection install community.general
+ansible-galaxy install -r requirements.yml
 
 . setup-google/terraform_outputs.sh
 

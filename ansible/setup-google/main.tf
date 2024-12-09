@@ -4,55 +4,26 @@ provider "google" {
   credentials = file(var.gcp_auth)
 }
 
-# resource "google_container_cluster" "primary" {
-#   name     = "whanos-deployment-cluster"
-#   location = var.gcp_region
-#   enable_autopilot         = false
-#   # enable_l4_ilb_subsetting = true
-
-#   # network    = google_compute_network.default.id
-#   # subnetwork = google_compute_subnetwork.default.id
-
-#   # remove_default_node_pool = true
-#   initial_node_count       = 2
-
-#   node_config {
-#     machine_type = "e2-medium"
-#     disk_size_gb = 10
-#   }
-
-#   deletion_protection = false
-# }
-
-
 resource "google_container_cluster" "primary" {
   name     = "whanos-gke-cluster"
   location = var.gcp_region
+  project = var.gcp_project_id
 
-  # We can't create a cluster with no node pool defined, but we want to only use
-  # separately managed node pools. So we create the smallest possible default
-  # node pool and immediately delete it.
-  remove_default_node_pool = true
-  initial_node_count       = 1
   deletion_protection = false
-}
+  node_locations = ["${var.gcp_region}-a"]
 
-resource "google_container_node_pool" "primary_preemptible_nodes" {
-  name       = "whanos-node-pool"
-  location   = var.gcp_region
-  cluster    = google_container_cluster.primary.name
-  node_count = 2
+  node_pool {
+    name       = "default-pool"
+    node_count = 2
 
-  node_config {
-    preemptible  = true
-    machine_type = "e2-small"
+    node_config {
+      machine_type = "e2-small"
+      disk_size_gb = 12
 
-    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-    service_account = google_service_account.default.email
-    oauth_scopes    = [
-      "https://www.googleapis.com/auth/cloud-platform"
-    ]
-    disk_size_gb = 12
+      oauth_scopes = [
+        "https://www.googleapis.com/auth/cloud-platform",
+      ]
+    }
   }
 }
 

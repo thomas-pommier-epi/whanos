@@ -2,66 +2,127 @@
 - name: Deploy Jenkins
   hosts: all
   become: true
+  vars:
+    jenkins_pwd: "{{ lookup('env', 'JENKINS_USER_PASSWORD') }}"
   tasks:
-    - name: add jenkins key
+    - name: Create directory for images
+      file:
+        path: /opt/docker-base-images/
+        state: directory
+        mode: "0755"
+      tags:
+        - copy-files
+
+    - name: Copy Docker images to /opt/images
+      copy:
+        src: ../images/
+        dest: /opt/docker-base-images/
+        mode: "0755"
+      tags:
+        - copy-files
+
+    - name: Create directory for jenkins configuration files
+      file:
+        path: /opt/jenkins_scripts/
+        state: directory
+        mode: "0755"
+      tags:
+        - copy-files
+
+    - name: Copy Jenkins Configuration as Code files to /opt/jenkins_scripts
+      copy:
+        src: ../jenkins/
+        dest: /opt/jenkins_scripts/
+        mode: "0755"
+      tags:
+        - copy-files
+
+    - name: Create directory for kubernetes configuration files
+      file:
+        path: /opt/k8s/
+        state: directory
+        mode: "0755"
+      tags:
+        - copy-files
+
+    - name: Copy Kubernetes configuration files to /opt/k8s
+      copy:
+        src: ../kubernetes/
+        dest: /opt/k8s/
+        mode: "0755"
+      tags:
+        - copy-files
+
+    ##############
+
+    - name: Add jenkins key
       apt_key:
         url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
         state: present
 
-    - name: add jenkins repo
-      apt_repository: #ansible module to add repo
+    - name: Add jenkins repo
+      apt_repository: # ansible module to add repo
         repo: "deb https://pkg.jenkins.io/debian-stable binary/"
         state: present
 
-    - name: install java #install java as jenkins need jdk
+    - name: Install Jenkins dependencies # jre and acl
       apt:
-        name: openjdk-11-jre
+        name:
+          - openjdk-17-jre
+          - acl
         state: present
 
-    - name: install jenkins #install jenkins
-      apt:
-        name: jenkins
-        state: present
+    # - name: Install jenkins
+    #   apt:
+    #     name: jenkins
+    #     state: present
 
-    ## Install Configuration files ##
+    # - name: Enable jenkins to start at boot time
+    #   service:
+    #     name: jenkins
+    #     enabled: true
 
-    - name: Copy Docker images to /opt/images
-      copy:
-      src: ../images/
-      dest: /opt/images/
-      mode: '0755'
-
-    - name: "Deploy jcasc"
-      hosts: jenkins
-      vars:
-        jenkins_casc_config_path_configure: true
-        jenkins_casc_config_path: "/var/lib/jenkins/jcasc-folder"
-        jenkins_casc_config_fileglobs:
-            - file/jcasc/my-jenkins/*.yml
-            - file/jcasc/my-jenkins/*.yaml
-
-
-
-    #################################
-
-    - name: enable jenkins to start at boot time
-      service:
-        name: jenkins
-        enabled: yes
-
-    - name: start jenkins service
-      service:
-        name: jenkins
-        state: started
-
+    # - name: Start jenkins service
+    #   service:
+    #     name: jenkins
+    #     state: started
 
     ## Jenkins has started ##
 
-    - name: Wait for Jenkins to start
-      uri:
-        url: http://localhost:8080/cli/
-        status_code: 200
-      register: result
-      until: result.status == 200
-      retries: 5
-      delay: 10
+    # - name: Wait for Jenkins to start
+    #   uri:
+    #     url: "http://localhost:8080/cli/"
+    #     method: GET
+    #     return_content: "yes"
+    #     timeout: 5
+    #     body_format: raw
+    #     follow_redirects: "no"
+    #     status_code: 200,403
+    #   register: jenkins_result
+    #   until: (jenkins_result.status == 403 or jenkins_result.status == 200) and (jenkins_result.content.find("Please wait while") == -1)
+
+    ## Install Configuration files ##
+
+    - name: Create directory for images
+      file:
+        path: /opt/jenkins
+        state: directory
+        mode: "0755"
+      tags:
+        - jcasc
+
+    - name: Deploy JCasC
+      vars:
+        jenkins_install_java: false
+        jenkins_jcasc_config_file: "../jenkins/jenkins.yml.j2"
+        jenkins_plugins_file: "../jenkins/plugins.yml"
+        jenkins_root: "/opt/jenkins"
+        jenkins_start_service: true
+        jenkins_version: 2.479.2
+        jenkins_pimt_args: "--latest false"
+        jenkins_web_user: "admin"
+        jenkins_web_password: "{{ jenkins_pwd }}"
+      import_role:
+        name: ableton.jenkins_jcasc
+      tags:
+        - jcasc

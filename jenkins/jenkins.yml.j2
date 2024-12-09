@@ -40,6 +40,7 @@ jenkins:
       enableCaptcha: false
       users:
       - id: "admin"
+        password: "{{ jenkins_pwd }}"
         name: "Admin"
         properties:
         - "apiToken"
@@ -51,17 +52,6 @@ jenkins:
         - "experimentalFlags"
         - mailer:
             emailAddress: "admin@epitech.eu"
-      - id: "arcod"
-        name: "Antoine ESMAN"
-        properties:
-        - "consoleUrlProvider"
-        - "myView"
-        - "timezone"
-        - "experimentalFlags"
-        - "apiToken"
-        - preferredProvider:
-            providerId: "default"
-        - "mailer"
   slaveAgentPort: -1
   updateCenter:
     sites:
@@ -82,7 +72,7 @@ security:
   apiToken:
     creationOfLegacyTokenEnabled: false
     tokenGenerationOnCreationEnabled: false
-    usageStatisticsEnabled: true
+    usageStatisticsEnabled: false
   gitHooks:
     allowedOnAgents: false
     allowedOnController: false
@@ -92,8 +82,6 @@ security:
     useScriptSecurity: true
   sSHD:
     port: -1
-  scriptApproval:
-    forceSandbox: false
 unclassified:
   buildDiscarders:
     configuredBuildDiscarders:
@@ -127,5 +115,5 @@ tool:
     globalSettingsProvider: "standard"
     settingsProvider: "standard"
 jobs:
-  - file: /home/antoine/.jenkins/jobs_base_images.groovy
-  - file: /home/antoine/.jenkins/job_link_project.groovy
+  - file: /opt/jenkins_scripts/jobs_base_images.groovy
+  - file: /opt/jenkins_scripts/job_link_project.groovy
