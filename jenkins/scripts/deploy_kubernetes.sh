@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ ! -f whanos.yml ]] then;
+if [[ ! -f whanos.yml ]]; then
     exit 0
 fi
 

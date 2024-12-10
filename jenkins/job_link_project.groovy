@@ -32,8 +32,8 @@ freeStyleJob('/link-project') {
                     scm("* * * * *")
                 }
                 steps {
-                    shell(". /opt/jenkins_scripts/scripts/build_image.sh $PROJECT_NAME")
-                    shell(". /opt/jenkins_scripts/scripts/deploy_image.sh $PROJECT_NAME")
+                    shell("bash /opt/jenkins_scripts/scripts/build_image.sh $PROJECT_NAME")
+                    shell("bash /opt/jenkins_scripts/scripts/deploy_kubernetes.sh $PROJECT_NAME")
                 }
             }''')
         }
