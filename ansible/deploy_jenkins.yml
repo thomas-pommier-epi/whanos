@@ -55,51 +55,12 @@
 
     ##############
 
-    - name: Add jenkins key
-      apt_key:
-        url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
-        state: present
-
-    - name: Add jenkins repo
-      apt_repository: # ansible module to add repo
-        repo: "deb https://pkg.jenkins.io/debian-stable binary/"
-        state: present
-
     - name: Install Jenkins dependencies # jre and acl
       apt:
         name:
           - openjdk-17-jre
           - acl
         state: present
-
-    # - name: Install jenkins
-    #   apt:
-    #     name: jenkins
-    #     state: present
-
-    # - name: Enable jenkins to start at boot time
-    #   service:
-    #     name: jenkins
-    #     enabled: true
-
-    # - name: Start jenkins service
-    #   service:
-    #     name: jenkins
-    #     state: started
-
-    ## Jenkins has started ##
-
-    # - name: Wait for Jenkins to start
-    #   uri:
-    #     url: "http://localhost:8080/cli/"
-    #     method: GET
-    #     return_content: "yes"
-    #     timeout: 5
-    #     body_format: raw
-    #     follow_redirects: "no"
-    #     status_code: 200,403
-    #   register: jenkins_result
-    #   until: (jenkins_result.status == 403 or jenkins_result.status == 200) and (jenkins_result.content.find("Please wait while") == -1)
 
     ## Install Configuration files ##
 
@@ -111,7 +72,7 @@
       tags:
         - jcasc
 
-    - name: Deploy JCasC
+    - name: Deploy Jenkins via JCasC
       vars:
         jenkins_install_java: false
         jenkins_jcasc_config_file: "../jenkins/jenkins.yml.j2"
@@ -126,3 +87,59 @@
         name: ableton.jenkins_jcasc
       tags:
         - jcasc
+
+    ## Docker Permissions ##
+
+    - name: Add Jenkins user to the docker group
+      user:
+        name: jenkins
+        groups: docker
+        append: true
+      tags:
+        - docker
+
+    - name: Read password file
+      command: echo "{{ lookup('file', 'registry/registry_pwd.txt') }}"
+      register: password_file_content
+      tags:
+        - docker
+
+    - name: Log in to Docker registry
+      become: true
+      shell: >
+        for line in {{ password_file_content.stdout }}; do
+          username=$(echo $line | cut -d':' -f1)
+          password=$(echo $line | cut -d':' -f2)
+          docker login -u $username -p $password http://localhost:5000
+        done
+      register: docker_login
+      changed_when: false
+      become_user: jenkins
+      tags:
+        - docker
+
+  ## Jenkins Scripts Dependencies ##
+
+    - name: Copy Requirements file
+      copy:
+        src: ../jenkins/python_requirements.txt
+        dest: /opt/jenkins_scripts/
+        mode: "0755"
+      tags:
+        - jenkins-scripts
+
+    - name: Install Python3 and Pip
+      apt:
+        name:
+          - python3
+          - python3-pip
+        state: present
+      tags:
+        - jenkins-scripts
+
+    - name: Install Python dependencies
+      pip:
+        requirements: /opt/jenkins_scripts/python_requirements.txt
+        break_system_packages: true
+      tags:
+        - jenkins-scripts

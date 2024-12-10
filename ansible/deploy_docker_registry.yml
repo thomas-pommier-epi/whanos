@@ -31,7 +31,6 @@
 
     - name: Create htpasswd file using bash
       shell: |
-        set -o pipefail
         for line in {{ password_file_content.stdout }}; do
           username=$(echo $line | cut -d':' -f1)
           password=$(echo $line | cut -d':' -f2)
