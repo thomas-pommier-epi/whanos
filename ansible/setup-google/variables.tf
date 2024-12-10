@@ -17,3 +17,8 @@ variable "gcp_auth" {
   description = "The path to the GCP auth token file"
   type        = string
 }
+
+variable "gcp_vm_disk_size" {
+  description = "The size of the VM disk"
+  type        = number
+}

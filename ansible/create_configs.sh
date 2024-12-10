@@ -14,7 +14,7 @@ ansible-galaxy install -r requirements.yml
 
 # Creating the hosts file
 echo "[vps]" > hosts.ini
-echo "${ANSIBLE_IP}" >> hosts.ini
+echo "${HEAD_IP}" >> hosts.ini
 echo "[vps:vars]" >> hosts.ini
 echo "ansible_user=ansible" >> hosts.ini
 echo "ansible_ssh_private_key_file=./keys/ansible_key" >> hosts.ini
