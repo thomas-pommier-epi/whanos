@@ -12,7 +12,7 @@ project_name = sys.argv[2]
 with open('/opt/k8s/template.deployment.yml', 'r') as f:
     k8s_template = f.read()
 
-with open(project_path, 'r') as f:
+with open(f"{project_path}/whanos.yml", 'r') as f:
     data = yaml.safe_load(f)
 
 if not data:
