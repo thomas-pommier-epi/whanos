@@ -33,7 +33,7 @@ freeStyleJob('/link-project') {
                 }
                 steps {
                     shell(". /opt/jenkins_scripts/scripts/build_image.sh $PROJECT_NAME")
-                    shell(". /opt/jenkins_scripts/scripts/deploy_image.sh")
+                    shell(". /opt/jenkins_scripts/scripts/deploy_image.sh $PROJECT_NAME")
                 }
             }''')
         }
