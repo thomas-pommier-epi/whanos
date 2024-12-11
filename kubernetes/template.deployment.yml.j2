@@ -28,7 +28,7 @@ spec:
                 topologyKey: "kubernetes.io/hostname"
       containers:
         - name: {{ name }}
-          image: {{ project_name }}
+          image: {{ image_name }}
           {% if deployment.resources %}
           resources:
             limits:
