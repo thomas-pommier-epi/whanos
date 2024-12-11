@@ -80,5 +80,8 @@ if [[ $? -ne 0 ]]; then
     exit 1
 fi
 
-docker tag $project_name localhost:5000/$project_name
-docker push localhost:5000/$project_name
+gc_project=$(cat /opt/auth/project_id)
+docker_image_name="gcr.io/$gc_project/$project_name:latest"
+
+docker tag $project_name $docker_image_name
+docker push $docker_image_name

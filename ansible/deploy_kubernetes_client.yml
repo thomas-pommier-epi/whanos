@@ -50,16 +50,81 @@
       copy:
         src: keys/whanos_gke.json
         dest: /opt/auth/whanos_gke.json
-        mode: '0600'
+        mode: '0644'
 
     - name: Authenticate to Google Cloud
       command: gcloud auth activate-service-account --key-file /opt/auth/whanos_gke.json
+      become: true
+      become_user: jenkins
 
     - name: Set Google Cloud project
       command: gcloud config set project {{ gcp_project_id }}
+      become: true
+      become_user: jenkins
 
     - name: Set compute zone
       command: gcloud config set compute/zone {{ gcp_region }}
+      become: true
+      become_user: jenkins
 
     - name: Get credentials for GKE cluster
       command: gcloud container clusters get-credentials "whanos-gke-cluster"
+      become: true
+      become_user: jenkins
+
+    ## Registry GKE secrets ##
+
+    - name: Create directory for kubernetes configuration files
+      file:
+        path: /opt/k8s/
+        state: directory
+        mode: "0755"
+      tags:
+        - copy-files
+        - docker
+
+    - name: Copy Kubernetes configuration files to /opt/k8s
+      copy:
+        src: ../kubernetes/
+        dest: /opt/k8s/
+        mode: "0755"
+      tags:
+        - copy-files
+        - docker
+
+    - name: Copy terraform output
+      copy:
+        src: ./setup-google/terraform_outputs.sh
+        dest: /opt/terraform_outputs.sh
+        mode: '0744'
+      tags:
+        - docker
+
+    - name: Export terraform outputs
+      shell:
+        cmd: |
+          . /opt/terraform_outputs.sh
+          echo "$HEAD_IP" > /opt/auth/head_ip
+          echo "$PROJECT_ID" > /opt/auth/project_id
+        executable: /bin/bash
+      tags:
+        - docker
+
+    - name: Set Cluster docker registry secrets
+      shell: >
+        kubectl create secret docker-registry registry-key \
+            --docker-server="https://gcr.io" \
+            --docker-username="_json_key" \
+            --docker-password="$(cat /opt/auth/whanos_gke.json)" \
+            --namespace=kube-system || true
+      become: true
+      become_user: jenkins
+      tags:
+        - docker
+
+    ## GCE ##
+
+    - name: Enable gcr.io
+      command: gcloud auth configure-docker --quiet
+      become: true
+      become_user: jenkins

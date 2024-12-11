@@ -2,14 +2,15 @@ import yaml
 from jinja2 import Template
 import sys
 
-if len(sys.argv) != 2:
-    print("Usage: python deployer.py <path/to/whanos.yml> <project_name>", file=sys.stderr)
+if len(sys.argv) != 4:
+    print("Usage: python deployer.py <path/to/whanos.yml> <project_name> <project_id>", file=sys.stderr)
     sys.exit(1)
 
 project_path = sys.argv[1]
 project_name = sys.argv[2]
+project_id = sys.argv[3]
 
-with open('/opt/k8s/template.deployment.yml', 'r') as f:
+with open('/opt/k8s/template.deployment.yml.j2', 'r') as f:
     k8s_template = f.read()
 
 with open(f"{project_path}/whanos.yml", 'r') as f:
@@ -20,6 +21,7 @@ if not data:
     sys.exit(1)
 
 data['name'] = project_name
+data['project_name'] = f"gcr.io/{project_id}/{project_name}"
 
 template = Template(k8s_template)
 rendered_yaml = template.render(data)

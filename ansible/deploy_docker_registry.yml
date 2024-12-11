@@ -11,32 +11,6 @@
         state: present
         update_cache: true
 
-    ## Auth ##
-
-    - name: Ensure htpasswd is present
-      apt:
-        name: apache2-utils
-        state: present
-        update_cache: true
-
-    - name: Create directory for Docker Registry auth
-      file:
-        path: /etc/docker/registry
-        state: directory
-        mode: '0755'
-
-    - name: Read password file
-      command: echo "{{ lookup('file', 'registry/registry_pwd.txt') }}"
-      register: password_file_content
-
-    - name: Create htpasswd file using bash
-      shell: |
-        for line in {{ password_file_content.stdout }}; do
-          username=$(echo $line | cut -d':' -f1)
-          password=$(echo $line | cut -d':' -f2)
-          htpasswd -cbB /etc/docker/registry/registry.password $username $password
-        done
-
     ##########
 
     - name: Ensure Docker service is running
@@ -44,32 +18,3 @@
         name: docker
         state: started
         enabled: true
-
-    - name: Create directory for Docker Registry data
-      file:
-        path: /var/lib/registry
-        state: directory
-        mode: '0755'
-
-    - name: Copy config.yml to target machine
-      copy:
-        src: registry/config.yml
-        dest: /etc/docker/registry/config.yml
-        mode: '0644'
-
-    - name: Deploy Docker Registry container
-      community.docker.docker_container:
-        name: registry
-        image: registry:2
-        state: started
-        restart_policy: always
-        ports:
-          - "5000:5000"
-        env:
-          REGISTRY_AUTH: htpasswd
-          REGISTRY_AUTH_HTPASSWD_REALM: Registry
-          REGISTRY_AUTH_HTPASSWD_PATH: /etc/docker/registry/registry.password
-          REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
-        volumes:
-          - /var/lib/registry:/var/lib/registry
-          - /etc/docker/registry:/etc/docker/registry

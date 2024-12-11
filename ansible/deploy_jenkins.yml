@@ -37,22 +37,6 @@
       tags:
         - copy-files
 
-    - name: Create directory for kubernetes configuration files
-      file:
-        path: /opt/k8s/
-        state: directory
-        mode: "0755"
-      tags:
-        - copy-files
-
-    - name: Copy Kubernetes configuration files to /opt/k8s
-      copy:
-        src: ../kubernetes/
-        dest: /opt/k8s/
-        mode: "0755"
-      tags:
-        - copy-files
-
     ##############
 
     - name: Install Jenkins dependencies # jre and acl
@@ -95,26 +79,6 @@
         name: jenkins
         groups: docker
         append: true
-      tags:
-        - docker
-
-    - name: Read password file
-      command: echo "{{ lookup('file', 'registry/registry_pwd.txt') }}"
-      register: password_file_content
-      tags:
-        - docker
-
-    - name: Log in to Docker registry
-      become: true
-      shell: >
-        for line in {{ password_file_content.stdout }}; do
-          username=$(echo $line | cut -d':' -f1)
-          password=$(echo $line | cut -d':' -f2)
-          docker login -u $username -p $password http://localhost:5000
-        done
-      register: docker_login
-      changed_when: false
-      become_user: jenkins
       tags:
         - docker
 

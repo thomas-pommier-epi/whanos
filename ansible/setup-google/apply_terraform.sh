@@ -32,5 +32,6 @@ export CLUSTER_NAME=$(terraform output cluster_name)
 echo "#!/bin/bash" > terraform_outputs.sh
 echo "HEAD_IP=${HEAD_IP}" >> terraform_outputs.sh
 echo "CLUSTER_NAME=${CLUSTER_NAME}" >> terraform_outputs.sh
+echo "PROJECT_ID=${TF_VAR_gcp_project_id}" >> terraform_outputs.sh
 
 chmod +x terraform_outputs.sh

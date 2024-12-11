@@ -22,5 +22,5 @@ export $(grep -v '^#' .env | xargs)
 export ANSIBLE_HOST_KEY_CHECKING=False
 
 ansible-playbook -i hosts.ini deploy_docker_registry.yml
-ansible-playbook -i hosts.ini deploy_kubernetes_client.yml
 ansible-playbook -i hosts.ini deploy_jenkins.yml
+ansible-playbook -i hosts.ini deploy_kubernetes_client.yml

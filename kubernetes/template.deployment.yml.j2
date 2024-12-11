@@ -28,7 +28,7 @@ spec:
                 topologyKey: "kubernetes.io/hostname"
       containers:
         - name: {{ name }}
-          image: hello-world # TODO replace by the url of the image
+          image: {{ project_name }}
           {% if deployment.resources %}
           resources:
             limits:
@@ -45,3 +45,5 @@ spec:
             - containerPort: {{ port }}
           {% endfor %}
       restartPolicy: Always
+      imagePullSecrets:
+        - name: registry-key

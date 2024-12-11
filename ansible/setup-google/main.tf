@@ -1,16 +1,16 @@
 provider "google" {
-  project = var.gcp_project_id
-  region  = var.gcp_region
+  project     = var.gcp_project_id
+  region      = var.gcp_region
   credentials = file(var.gcp_auth)
 }
 
 resource "google_container_cluster" "primary" {
   name     = "whanos-gke-cluster"
   location = var.gcp_region
-  project = var.gcp_project_id
+  project  = var.gcp_project_id
 
   deletion_protection = false
-  node_locations = ["${var.gcp_region}-a"]
+  node_locations      = ["${var.gcp_region}-a"]
 
   node_pool {
     name       = "default-pool"
@@ -51,7 +51,7 @@ resource "google_compute_instance" "default" {
   }
 
   metadata = {
-    ssh-keys = "ansible:${file("../keys/ansible_key.pub")}"
+    ssh-keys       = "ansible:${file("../keys/ansible_key.pub")}"
     startup-script = <<-EOT
       #!/bin/bash
       echo 'ansible ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/ansible
@@ -63,8 +63,18 @@ resource "google_compute_instance" "default" {
   }
 }
 
+##### GCR Repo #####
+
+# resource "google_container_registry" "default" {
+#   project = var.gcp_project_id
+#   location = var.gcp_region
+# }
+
+#####################
+
+
 resource "google_compute_address" "static_ip" {
-  name = "whanos-head-static-ip"
+  name   = "whanos-head-static-ip"
   region = var.gcp_vm_region
 }
 

@@ -9,8 +9,8 @@ variable "gcp_region" {
 }
 
 variable "gcp_vm_region" {
-    description = "The GCP VM region"
-    type        = string
+  description = "The GCP VM region"
+  type        = string
 }
 
 variable "gcp_auth" {
