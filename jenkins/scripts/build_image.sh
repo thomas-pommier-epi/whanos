@@ -3,6 +3,11 @@
 project_name=$1
 base_image_folder="/opt/docker-base-images/"
 
+if [[ $project_name == whanos-* ]]; then
+    echo "Invalid project name, do not use the 'whanos-' prefix"
+    exit 1
+fi
+
 if [[ -f Dockerfile ]]; then
     docker build -t $project_name .
     exit 0
@@ -79,9 +84,3 @@ if [[ $? -ne 0 ]]; then
     echo "No valid project found"
     exit 1
 fi
-
-gc_project=$(cat /opt/auth/project_id)
-docker_image_name="gcr.io/$gc_project/$project_name:latest"
-
-docker tag $project_name $docker_image_name
-docker push $docker_image_name

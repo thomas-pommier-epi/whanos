@@ -19,6 +19,7 @@
         dest: /opt/docker-base-images/
         mode: "0755"
       tags:
+        - fast-image-copy
         - copy-files
 
     - name: Create directory for jenkins configuration files

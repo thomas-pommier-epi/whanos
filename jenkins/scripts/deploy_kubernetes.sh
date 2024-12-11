@@ -23,10 +23,6 @@ if [[ $will_restart_deploy -eq 0 ]]; then
     kubectl rollout restart deployment/$project_name
 fi
 
-if [[ $will_restart_service -eq 0 ]]; then
-    kubectl rollout restart service/$project_name
-fi
-
 external_ip=""
 tries=0
 max_tries=20

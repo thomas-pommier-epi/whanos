@@ -1,4 +1,4 @@
-FROM alpine:3.20
+FROM node:20.9-alpine
 
 LABEL base-image-name="whanos-javascript"
 
@@ -11,16 +11,12 @@ ONBUILD ENV SHELL=/bin/bash
 
 WORKDIR /app
 
-ONBUILD RUN apk add --no-cache nodejs npm
-
 ONBUILD COPY package.json /app
 
 ONBUILD RUN if [ ! -f package.json ]; then echo "package.json not found!" && exit 1; fi
 
-ONBUILD RUN  apk add --no-cache npm \
-    && npm install \
+ONBUILD RUN  npm install \
     && npm cache clean --force \
-    && apk del npm \
     && rm -rf /tmp/* /var/tmp/*
 
 ONBUILD COPY /app /app

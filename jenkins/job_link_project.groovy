@@ -33,6 +33,7 @@ freeStyleJob('/link-project') {
                 }
                 steps {
                     shell("bash /opt/jenkins_scripts/scripts/build_image.sh $PROJECT_NAME")
+                    shell("bash /opt/jenkins_scripts/scripts/push_registry.sh $PROJECT_NAME")
                     shell("bash /opt/jenkins_scripts/scripts/deploy_kubernetes.sh $PROJECT_NAME")
                 }
             }''')
