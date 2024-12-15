@@ -2,7 +2,7 @@
 
 Connect to jenkins with the user `admin` and the password you defined earlier in `JENKINS_USER_PASSWORD` variable in the `.env` file.
 
-From the dashboard, click the green arrow from the workflow `link-project`.
+From the dashboard, click the green arrow logo on the right of the workflow `link-project`.
 
 You have multiple possibilities
 

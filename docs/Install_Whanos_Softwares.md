@@ -55,14 +55,14 @@ http://{head_server_ip}:8080/
 You should see a login screen:
 ![<img alt="Jenkins Login Screen" width="748px" height="420ox" src="./images/jenkins_login.png" />](./images/jenkins_login.png)
 
-As a the username, put `admin`.
+For the username, put `admin`.
 
 For the password, put the variable you wrote for JENKINS_USER_PASSWORD in the `.env` file.
 
 ## Build Images
 
-The first thing you need to do in jenkins is buildin the applications base images.
+The first thing you need to do in jenkins is building the applications base images.
 
-1. From the dashboard, Go to the folder `Whanos base images`
-2. Click on the arrow key to run the workflow: `Build all base images`
+1. From the dashboard, go to the folder `Whanos base images`
+2. Click on the green arrow logo to run the workflow: `Build all base images`
 3. Once done without errors, follow the next step
