@@ -1,11 +1,8 @@
 # Install Infrastructure Softwares
 
-In the `${workdir}/ansible/` folder. (`cd ${workdir}/ansible/`)
-Copy the `.env.example` to `.env`
-
 ## Prerequisites
 
-- >= Python3.10
+- `>=` Python3.10
 - A Shell (Bash)
 - The infrastructure (`setup-google/` folder)
 - A Web Browser (supports jenkins)
@@ -14,7 +11,7 @@ Open the terminal and go to the github repo directory via `cd`.
 
 ## Environement Setup
 
-In the `${workdir}/ansible` folder. (`cd ${workdir}/ansible/`)
+In the `${workdir}/ansible` folder. (`cd ${workdir}/ansible`)
 Copy the `.env.example` to `.env`
 
 Edit all the necessary variables, here all the necessary decription(s):
@@ -47,16 +44,20 @@ This should setup all the necessary software and permissions to the head server.
 
 ## Connect to Jenkins
 
-With the heads erver IP (external IP from the IaC output),
-connect via a web browser the url (with user modification):
+With the head server IP (external IP from the IaC output),
+connect via a web browser to the url (with user modification):
 
-`http://{head_server_ip}:8080/`
+**Replace `{head_server_ip}` with the saved head external IP without the brackets.**
+```
+http://{head_server_ip}:8080/
+```
 
 You should see a login screen:
 ![<img alt="Jenkins Login Screen" width="748px" height="420ox" src="./images/jenkins_login.png" />](./images/jenkins_login.png)
 
-As a the username, put `admin`
-For the password, the variable you wrote for JENKINS_USER_PASSWORD
+As a the username, put `admin`.
+
+For the password, put the variable you wrote for JENKINS_USER_PASSWORD in the `.env` file.
 
 ## Build Images
 
