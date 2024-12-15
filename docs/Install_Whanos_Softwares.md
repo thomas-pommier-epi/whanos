@@ -48,7 +48,8 @@ With the head server IP (external IP from the IaC output),
 connect via a web browser to the url (with user modification):
 
 **Replace `{head_server_ip}` with the saved head external IP without the brackets.**
-```
+
+```bash
 http://{head_server_ip}:8080/
 ```
 

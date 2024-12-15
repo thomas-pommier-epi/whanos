@@ -2,8 +2,6 @@
 
 If you are a developer of the Whanos project, this is the required information you can start with.
 
-
-
 ## Technologies used
 
 Whanos use multiple devops technologies, this is a presentation of their purpose on the project, not a definition.
@@ -11,7 +9,7 @@ Whanos use multiple devops technologies, this is a presentation of their purpose
 - Ansible: Install Jenkins, Docker and kubectl to the head server
 - Docker: Images for the applications
 - Terraform: create the infrastructure in Google Cloud
-- Jenkins: Build, Register and deploy the applications from the git repository (peridacally check if any updates happen via CRON)
+- Jenkins: Build, Register and deploy the applications from the git repository (periodically check if any updates happen via CRON)
 - Docker Refistry: Store the applications images (gcr.io)
 - Kubernetes: Handle and deploy the applications with a Deployment and a Load Balancer configuration file
 
@@ -74,18 +72,16 @@ For this, let's imagine we want to create a Rust Application. This assumed you h
 
 1. **Create a base and standalone image**:
 
-- The base image, which is the must instructions of an image
-- The standalone image, if the user hasn't tdevelopped a custom image to run the applications
+    - The base image, which is the must instructions of an image
+    - The standalone image, if the user hasn't tdevelopped a custom image to run the applications
+2. **Add Jenkis rules**:
 
-2. **Add Jenkis rules**
+    - In the file `jenkins/jobs_base_images.groovy`, there is the commented code (// FOR DEV) to add your image worflow build.
 
-- In the file `jenkins/jobs_base_images.groovy`, there is the commented code (// FOR DEV) to add your image worflow build.
+3. **Add a detection rule**:
 
-3. **Add a detection rule**
+    - In the file `jenkins/scripts/build_image.sh`, add a detection function in bash, there is as well documented code (# FOR DEV) to guide you.
 
-- In the file `jenkins/scripts/build_image.sh`, add a detection function in bash, there is as well documented code (# FOR DEV) to guide you.
+4. **Apply modifications**:
 
-4. **Apply modifications**
-
-- Apply the softwares with `deploy.sh` (assumed you followed the tutorial) of deployment. Even if it is already deployed, you must define the necessary `.env` and get the outputs from Terraform with `apply_teraform.sh`.
-
+    - Apply the softwares with `deploy.sh` (assumed you followed the tutorial) of deployment. Even if it is already deployed, you must define the necessary `.env` and get the outputs from Terraform with `apply_teraform.sh`.

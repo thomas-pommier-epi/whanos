@@ -93,13 +93,28 @@ no specifications; the syntax expected here is the same as the given link);
 - **ports** -> an integer list of ports needed by the container to be forwarded to it (default: no ports
 forwarded)
 
+Example of a `whanos.yml` deployment file:
+
+```yaml
+deployment:
+  replicas: 2
+  resources:
+    limits:
+      memory: "128M"
+    requests:
+      memory: "64M"
+  ports:
+    - 3000
+```
+
 ## Linking to Whanos
 
 With the head server IP (external IP from the IaC output),
 connect via a web browser to the url (with user modification):
 
 **Replace `{head_server_ip}` with the saved head external IP without the brackets.**
-```
+
+```bash
 http://{head_server_ip}:8080/
 ```
 
