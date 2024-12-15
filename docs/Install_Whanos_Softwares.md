@@ -66,3 +66,7 @@ The first thing you need to do in jenkins is building the applications base imag
 1. From the dashboard, go to the folder `Whanos base images`
 2. Click on the green arrow logo to run the workflow: `Build all base images`
 3. Once done without errors, follow the next step
+
+## Next Step
+
+Link a Whanos project for testing, with a `whanos.yml` for the deployment for example: [Link a Whanos Project](./Link_a_Project.md).

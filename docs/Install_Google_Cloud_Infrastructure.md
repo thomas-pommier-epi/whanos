@@ -43,7 +43,7 @@ run the script `./give_sau_privileges.sh`:
 ./give_sau_privileges.sh
 ```
 
-**Wait a few minutes for Google to update the privileges**
+**Wait a few minutes for Google to update the privileges**.
 
 ## Apply IaC
 
@@ -56,3 +56,7 @@ Once done, run the script `./apply_terraform.sh` to init the infrastructure: :
 If no error is detected, there should be a file named `terraform_outputs.sh`. And you can go to the next step.
 
 Note the external IP of the Head of Whanos, where you can connect to jenkins.
+
+## Next Step
+
+Install the necessary softwares via Ansible: [Install Whanos Software](./Install_Whanos_Softwares.md).

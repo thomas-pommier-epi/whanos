@@ -8,6 +8,12 @@ You have multiple possibilities
 
 ## Build Parameters
 
+Here what the page looks like:
+
+![<img alt="Jenkins Green Link project" src="./images/jenkins_link_project.png" />](./images/jenkins_link_project.png)
+
+Here are the necessary descriptions:
+
 - Project_name
   - Project name that will be the workflow name created, as well as the pod name if the project should be deployed.
 

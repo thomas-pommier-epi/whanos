@@ -2,7 +2,8 @@
 
 ## Technologies used
 
-Whanos use multiple devops technologies, this is a presentation of their purpose on the project, not a definition
+Whanos use multiple devops technologies, this is a presentation of their purpose on the project, not a definition.
+
 - Ansible: Install Jenkins, Docker and kubectl to the head server
 - Docker: Images for the applications
 - Terraform: create the infrastructure in Google Cloud

@@ -65,3 +65,7 @@
 
     - Go to the [Compute Engine API](https://console.cloud.google.com/apis/library/compute.googleapis.com) page.
     - Click on the "Enable" button.
+
+## Next Step
+
+Install the Google cloud ressources: [Install Google Cloud Infrastructure](./Install_Google_Cloud_Infrastructure.md).
