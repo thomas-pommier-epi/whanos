@@ -1,5 +1,9 @@
 # Developer informations
 
+If you are a developer of the Whanos project, this is the required information you can start with.
+
+
+
 ## Technologies used
 
 Whanos use multiple devops technologies, this is a presentation of their purpose on the project, not a definition.
@@ -10,6 +14,10 @@ Whanos use multiple devops technologies, this is a presentation of their purpose
 - Jenkins: Build, Register and deploy the applications from the git repository (peridacally check if any updates happen via CRON)
 - Docker Refistry: Store the applications images (gcr.io)
 - Kubernetes: Handle and deploy the applications with a Deployment and a Load Balancer configuration file
+
+## File structure
+
+Here's the file structure of the Whanos project.
 
 ```bash
 .
@@ -59,3 +67,25 @@ Whanos use multiple devops technologies, this is a presentation of their purpose
   - `deployer.py`: Python script that generate the templates based on the `whanos.yml` file, the project name and the Google Cloud project ID
   - `template.deployment.yml.j2`: Jinja2 template for the deployment script for jenkins
   - `template.service.yml.j2`: Jinja2 template for the Load baalncer service
+
+## Add a new project
+
+For this, let's imagine we want to create a Rust Application. This assumed you have the permissions and already deployed the Whanos project.
+
+1. **Create a base and standalone image**:
+
+- The base image, which is the must instructions of an image
+- The standalone image, if the user hasn't tdevelopped a custom image to run the applications
+
+2. **Add Jenkis rules**
+
+- In the file `jenkins/jobs_base_images.groovy`, there is the commented code (// FOR DEV) to add your image worflow build.
+
+3. **Add a detection rule**
+
+- In the file `jenkins/scripts/build_image.sh`, add a detection function in bash, there is as well documented code (# FOR DEV) to guide you.
+
+4. **Apply modifications**
+
+- Apply the softwares with `deploy.sh` (assumed you followed the tutorial) of deployment. Even if it is already deployed, you must define the necessary `.env` and get the outputs from Terraform with `apply_teraform.sh`.
+

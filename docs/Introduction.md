@@ -23,4 +23,8 @@ Here is the table of the tutorial of successfully initialize the whanos project.
 | [Creating Google Project](./Creating_Google_Account.md) | Creating the google project, service account necessary for Whanos infrastructure. |
 | [Install Google Cloud Infrastructure](./Install_Google_Cloud_Infrastructure.md) | Initialize the necessary cloud ressources for whanos (VPS, Kubernetes Cluster) |
 | [Install Whanos Software](./Install_Whanos_Softwares.md) | Install the necessary softwares and permissions for Whanos to function |
-| [Link a Whanos Project](./Link_a_Project.md) | Once the installation is done, link a project |
+| [How to Install an Application](./How_To_Develop_Project.md) | Once the installation is done, deploy an application ! |
+
+## Developers
+
+If you're aspiring to be a Whanos developer, check the documentation here: [Developer Introduction](./Developper_Introduction.md).

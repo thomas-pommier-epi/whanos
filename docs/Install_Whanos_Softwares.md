@@ -69,4 +69,4 @@ The first thing you need to do in jenkins is building the applications base imag
 
 ## Next Step
 
-Link a Whanos project for testing, with a `whanos.yml` for the deployment for example: [Link a Whanos Project](./Link_a_Project.md).
+Link a Whanos project for testing, with a `whanos.yml` for the deployment for example: [How to Install an Application](./How_To_Develop_Project.md).

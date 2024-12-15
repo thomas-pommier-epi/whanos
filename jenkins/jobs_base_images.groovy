@@ -12,6 +12,8 @@ freeStyleJob('/Whanos base images/Build all base images') {
         downstream('whanos-java', 'SUCCESS')
         downstream('whanos-befunge', 'SUCCESS')
         downstream('whanos-python', 'SUCCESS')
+        // FOR DEV: add a new image (e.g: Rust)
+        // downstream('whanos-rust', 'SUCCESS')
     }
 }
 
@@ -49,3 +51,10 @@ freeStyleJob('/Whanos base images/whanos-python') {
         shell('docker build -t whanos-python - < /opt/docker-base-images/python/Dockerfile.base')
     }
 }
+
+// FOR DEV: add a new image (e.g: Rust)
+// freeStyleJob('/Whanos base images/whanos-rust') {
+//     steps {
+//         shell('docker build -t whanos-rust - < /opt/docker-base-images/rust/Dockerfile.base')
+//     }
+// }

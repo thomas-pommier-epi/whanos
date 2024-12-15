@@ -29,7 +29,7 @@ Once fully edited, continue to the next step.
 
 ## Ansible credentials creation
 
-run the script `./create_ansible_keys.sh`:
+Run the script `./create_ansible_keys.sh`:
 
 ```bash
 ./create_ansible_keys.sh
@@ -37,7 +37,7 @@ run the script `./create_ansible_keys.sh`:
 
 ## Service account permissions
 
-run the script `./give_sau_privileges.sh`:
+Run the script `./give_sau_privileges.sh`:
 
 ```bash
 ./give_sau_privileges.sh
@@ -47,7 +47,7 @@ run the script `./give_sau_privileges.sh`:
 
 ## Apply IaC
 
-Once done, run the script `./apply_terraform.sh` to init the infrastructure: :
+Once done, run the script `./apply_terraform.sh` to init the infrastructure:
 
 ```bash
 ./apply_terraform.sh

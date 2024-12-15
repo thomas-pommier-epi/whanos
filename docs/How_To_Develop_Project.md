@@ -10,7 +10,7 @@ The project must be a supported language:
 - Python
 - Befunge
 
-**Your project must be in a accessible git repository**. It cna be Github, Gitlab or a private git server. Whanos can access it via access tokens, credentials or a SSH key.
+**Your project must be in a accessible git repository**. It can be Github, Gitlab or a private git server. Whanos can access it via access tokens, credentials or a SSH key.
 
 ## Criterias for Supported Languages
 
@@ -61,10 +61,10 @@ The project must be a supported language:
 
 ## Custom Image
 
-For each language, there is a default Docker image, but you can define a `Dockerfile` **at the repo of your repository**.
-It must import the **base image of the language**.
+For each language, there is a default Docker image, but you can define a `Dockerfile` **at the repo of your repository** which might contian modifications.
+It must import the **base image of the language** however.
 
-Example:
+Example of a typescript application from the javascript base Whanos image:
 
 ```dockerfile
 FROM whanos-javascript
@@ -108,7 +108,6 @@ You should see a login screen:
 ![<img alt="Jenkins Login Screen" width="748px" height="420ox" src="./images/jenkins_login.png" />](./images/jenkins_login.png)
 
 Once logged in, click on the green arrow framed in red:
-You should see a login screen:
 
 ![<img alt="Jenkins Green arrow" src="./images/jenkins_link_project_workflow.png" />](./images/jenkins_link_project_workflow.png)
 

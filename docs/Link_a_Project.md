@@ -2,9 +2,12 @@
 
 Connect to jenkins with the user `admin` and the password you defined earlier in `JENKINS_USER_PASSWORD` variable in the `.env` file.
 
-From the dashboard, click the green arrow logo on the right of the workflow `link-project`.
+You should see this dashboard once logged in:
 
-You have multiple possibilities
+![<img alt="Jenkins Dahsboard" src="./images/jenkins_dashboard.png" />](./images/jenkins_dashboard.png)
+
+
+**From the dashboard, click the green arrow logo on the right of the workflow** `link-project`.
 
 ## Build Parameters
 
@@ -25,6 +28,8 @@ Here are the necessary descriptions:
     - Username and Password
     - Auth token
     - Certificate
+
+What you need to set for the creditions is told via Jenkins.
 
 Once everything is setup, you can return to the dashboard and go to: `Projects/<project_name>`.
 

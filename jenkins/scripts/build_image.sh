@@ -76,8 +76,14 @@ build_befunge() {
     return 0
 }
 
+# FOR DEV (eg. Rust build)
+# build_rust() {
+
+#}
+
 ####################
 
+# FOR DEV, add the function with a || at the end (eg. || build_rust)
 build_c || build_java || build_python || build_javascript || build_befunge
 
 if [[ $? -ne 0 ]]; then
