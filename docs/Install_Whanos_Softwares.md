@@ -53,7 +53,7 @@ connect via a web browser the url (with user modification):
 `http://{head_server_ip}:8080/`
 
 You should see a login screen:
-![<img alt="Jenkins Login Screen" width="748px" height="420ox" src="./images/jenkins_logins.png" />](./images/jenkins_logins.png)
+![<img alt="Jenkins Login Screen" width="748px" height="420ox" src="./images/jenkins_login.png" />](./images/jenkins_login.png)
 
 As a the username, put `admin`
 For the password, the variable you wrote for JENKINS_USER_PASSWORD
