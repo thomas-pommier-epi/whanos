@@ -1,5 +1,7 @@
 # Creating a Google Cloud Project
 
+## Creating the Projet
+
 1. **Sign in to Google Cloud Console:**
 
     - Go to the [Google Cloud Console](https://console.cloud.google.com/).
@@ -16,7 +18,7 @@
 
     - If you haven't already set up billing, you will be prompted to do so. Follow the instructions to set up billing for your project.
 
-# Creating a Service Account
+## Creating a Service Account
 
 1. **Navigate to the IAM & Admin Section:**
 
@@ -35,7 +37,7 @@
     - You can grant users access to act as this service account. This step is optional.
     - Click on the "Done" button.
 
-# Downloading the Service Account Key
+## Downloading the Service Account Key
 
 1. **Generate a Key:**
 
@@ -52,7 +54,7 @@
     - The JSON key file will be automatically downloaded, once downloaded put it in `${workdir}/ansible/setup-google/`
     - Rename the file `whanos_gke.json`
 
-# Enabling APIs
+## Enabling APIs
 
 1. **Enable the Kubernetes Engine API:**
 

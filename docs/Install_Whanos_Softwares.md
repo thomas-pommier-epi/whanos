@@ -1,50 +1,59 @@
 # Install Infrastructure Softwares
 
-In the `ansible/` folder. (`cd ansible/`)
+In the `${workdir}/ansible/` folder. (`cd ${workdir}/ansible/`)
 Copy the `.env.example` to `.env`
 
-## Prerequisists
+## Prerequisites
 
-- Python
-- A Shell
-- The infrastructure
-- A Web Browser
+- >= Python3.10
+- A Shell (Bash)
+- The infrastructure (`setup-google/` folder)
+- A Web Browser (supports jenkins)
 
 Open the terminal and go to the github repo directory via `cd`.
 
 ## Environement Setup
 
-In the `ansible/setup-google` folder. (`cd ansible/setup-google`)
+In the `${workdir}/ansible` folder. (`cd ${workdir}/ansible/`)
 Copy the `.env.example` to `.env`
 
-Edit all the necessary variables, here all the necessary decriptions:
+Edit all the necessary variables, here all the necessary decription(s):
 
 | Variable Name           | Description              |
 |-------------------------|--------------------------|
 | JENKINS_USER_PASSWORD   | Jenkins `admin` password |
 
-
 Once fully edited, continue to the next step.
 
 ## Creating the config
 
-run the script `./create_configs.sh`:
+Run the script `./create_configs.sh`:
 
 ```bash
 ./create_configs.sh
 ```
 
-If everything went right (no ansible errors).
+If everything went right (no ansible errors). Follow the next category.
+
+## Deploy
+
+Run the script `./deploy.sh`:
+
+```bash
+./deploy.sh
+```
+
+This should setup all the necessary software and permissions to the head server. If no ansible error is reported, follow the next step.
 
 ## Connect to Jenkins
 
-With the HEAD Server IP (external IP from the IaC output),
+With the heads erver IP (external IP from the IaC output),
 connect via a web browser the url (with user modification):
 
 `http://{head_server_ip}:8080/`
 
 You should see a login screen:
-![Jenkins Login Screen](./images/jenkins_logins.png)
+![<img alt="Jenkins Login Screen" width="748px" height="420ox" src="./images/jenkins_logins.png" />](./images/jenkins_logins.png)
 
 As a the username, put `admin`
 For the password, the variable you wrote for JENKINS_USER_PASSWORD

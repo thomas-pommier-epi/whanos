@@ -1,6 +1,6 @@
 # Install Google Cloud Infrastucture
 
-## Prerequisists
+## Prerequisites
 
 - Terraform
 - Google Terraform Plugin
