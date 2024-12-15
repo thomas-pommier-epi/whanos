@@ -84,6 +84,12 @@
       tags:
         - docker
 
+    # Jenkins shell ran without docker group
+    - name: Restart Jenkins service
+      service:
+        name: jenkins
+        state: restarted
+
   ## Jenkins Scripts Dependencies ##
 
     - name: Copy Requirements file

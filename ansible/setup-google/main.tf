@@ -33,7 +33,7 @@ resource "google_compute_instance" "default" {
   name         = "whanos-head"
   machine_type = "e2-medium"
   zone         = "${var.gcp_vm_region}-a"
-  tags         = ["allow-ssh", "allow-jenkins", "allow-docker-registry"]
+  tags         = ["allow-ssh", "allow-jenkins"]
 
   boot_disk {
     initialize_params {
@@ -90,17 +90,4 @@ resource "google_compute_firewall" "jenkins" {
 
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["allow-jenkins"]
-}
-
-resource "google_compute_firewall" "docker_registry" {
-  name    = "allow-docker-registry"
-  network = "default"
-
-  allow {
-    protocol = "tcp"
-    ports    = ["5000"]
-  }
-
-  source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["allow-docker-registry"]
 }

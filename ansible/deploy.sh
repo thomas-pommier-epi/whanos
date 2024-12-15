@@ -15,6 +15,11 @@ if [ ! -f ./setup-google/.env ]; then
     exit 1
 fi
 
+if [ ! -f .env ]; then
+    echo "Please create a .env file with the necessary jenkins environment variables."
+    exit 1
+fi
+
 source .venv/bin/activate
 
 export $(grep -v '^#' setup-google/.env | xargs)
